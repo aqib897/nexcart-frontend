@@ -57,10 +57,15 @@ export const UserProvider = ({ children }) => {
   }
 
   async function fetchUser() {
+    const token = Cookies.get("token");
+    if (!token) {
+      setLoading(false);
+      return;
+    }
     try {
       const { data } = await axios.get(`${server}/api/user/me`, {
         headers: {
-          Authorization: `Bearer ${Cookies.get("token")}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
