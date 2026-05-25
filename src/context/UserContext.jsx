@@ -23,7 +23,7 @@ export const UserProvider = ({ children }) => {
       navigate("/verify");
       setBtnLoading(false);
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error?.response?.data?.message || "Connection timeout");
       setBtnLoading(false);
     }
   }
