@@ -1,4 +1,4 @@
-import { cartData } from "@/context/CartContext";
+import { cartData } from "@/context/CartContext.jsx";
 import { server } from "@/main";
 import Cookies from "js-cookie";
 import axios from "axios";
@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button.jsx";
 
 const OrderProcessing = () => {
   const location = useLocation();

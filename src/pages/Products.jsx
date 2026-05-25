@@ -1,15 +1,15 @@
-import Loading from "@/components/Loading";
-import ProductCard from "@/components/ProductCard";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import Loading from "@/components/Loading.jsx";
+import ProductCard from "@/components/ProductCard.jsx";
+import { Button } from "@/components/ui/button.jsx";
+import { Input } from "@/components/ui/input.jsx";
 import {
   Pagination,
   PaginationContent,
   PaginationItem,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination";
-import { ProductData } from "@/context/ProductContext";
+} from "@/components/ui/pagination.jsx";
+import { ProductData } from "@/context/ProductContext.jsx";
 import { Filter, X } from "lucide-react";
 import { useState } from "react";
 

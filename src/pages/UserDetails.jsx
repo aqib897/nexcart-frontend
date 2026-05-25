@@ -4,8 +4,8 @@ import Cookies from "js-cookie";
 import { useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { server } from "@/main";
-import { UserData } from "@/context/UserContext";
-import { Button } from "@/components/ui/button";
+import { UserData } from "@/context/UserContext.jsx";
+import { Button } from "@/components/ui/button.jsx";
 import { Home } from "lucide-react";
 
 const UserDetails = () => {
@@ -59,7 +59,7 @@ const UserDetails = () => {
 
   const changeRole = async (role) => {
     try {
-      const { data } = await axios.put(
+      const { da.jsxta } = await axios.put(
         `${server}/api/user/${id}/role`,
         { role },
         {

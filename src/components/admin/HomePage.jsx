@@ -1,7 +1,7 @@
 import { ProductData } from "@/context/ProductContext";
 import Loading from "../Loading";
 import Cookies from "js-cookie";
-import ProductCard from "../ProductCard";
+import ProductCard from "../ProductCard.jsx";
 import { Loader2 } from "lucide-react";
 import {
   Pagination,
@@ -9,8 +9,8 @@ import {
   PaginationItem,
   PaginationNext,
   PaginationPrevious,
-} from "../ui/pagination";
-import { Button } from "../ui/button";
+} from "../ui/pagination.jsx";
+import { Button } from "../ui/button.jsx";
 import {
   Dialog,
   DialogContent,
@@ -18,8 +18,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
-import { Input } from "../ui/input";
+} from "../ui/dialog.jsx";
+import { Input } from "../ui/input.jsx";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";

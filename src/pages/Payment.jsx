@@ -1,10 +1,9 @@
-import Loading from "@/components/Loading";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { cartData } from "@/context/CartContext";
+import Loading from "@/components/Loading.jsx";
+import { Button } from "@/components/ui/button.jsx";
+import { Separator } from "@/components/ui/separator.jsx";
+import { cartData } from "@/context/CartContext.jsx";
 import { server } from "@/main";
 import axios from "axios";
-import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";

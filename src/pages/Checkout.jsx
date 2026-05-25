@@ -1,5 +1,5 @@
-import Loading from "@/components/Loading";
-import { Button } from "@/components/ui/button";
+import Loading from "@/components/Loading.jsx";
+import { Button } from "@/components/ui/button.jsx";
 import { server } from "@/main";
 import Cookies from "js-cookie";
 import axios from "axios";
@@ -13,8 +13,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+} from "@/components/ui/dialog.jsx";
+import { Input } from "@/components/ui/input.jsx";
 
 const Checkout = () => {
   const [address, setAddress] = useState([]);

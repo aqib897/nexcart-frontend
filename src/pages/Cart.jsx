@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { cartData } from "@/context/CartContext";
+import { Button } from "@/components/ui/button.jsx";
+import { Separator } from "@/components/ui/separator.jsx";
+import { cartData } from "@/context/CartContext.jsx";
 import { ShoppingCart, Trash } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 

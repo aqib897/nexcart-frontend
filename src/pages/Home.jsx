@@ -1,8 +1,8 @@
-import Hero from "@/components/Hero";
-import ProductCard from "@/components/ProductCard";
-import { ProductData } from "@/context/ProductContext";
+import Hero from "@/components/Hero.jsx";
+import ProductCard from "@/components/ProductCard.jsx";
+import { ProductData } from "@/context/ProductContext.jsx";
 import { useNavigate } from "react-router-dom";
-import Loading from "@/components/Loading";
+import Loading from "@/components/Loading.jsx";
 
 const Home = () => {
   const navigate = useNavigate();

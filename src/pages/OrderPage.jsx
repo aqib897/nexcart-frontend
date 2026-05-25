@@ -1,7 +1,12 @@
-import Loading from "@/components/Loading";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { UserData } from "@/context/UserContext";
+import Loading from "@/components/Loading.jsx";
+import { Button } from "@/components/ui/button.jsx";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card.jsx";
+import { UserData } from "@/context/UserContext.jsx";
 import { server } from "@/main";
 import axios from "axios";
 import Cookies from "js-cookie";

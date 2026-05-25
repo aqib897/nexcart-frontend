@@ -1,12 +1,17 @@
-import Loading from "@/components/Loading";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Loading from "@/components/Loading.jsx";
+import { Button } from "@/components/ui/button.jsx";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card.jsx";
 import { server } from "@/main";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/ui/input.jsx";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);

@@ -1,8 +1,8 @@
 import { server } from "@/main";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Input } from "../ui/input";
-import Loading from "../Loading";
+import { Input } from "../ui/input.jsx";
+import Loading from "../Loading.jsx";
 import Cookies from "js-cookie";
 import { Link } from "react-router-dom";
 import {
@@ -12,7 +12,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../ui/table";
+} from "../ui/table.jsx";
 import moment from "moment";
 import toast from "react-hot-toast";
 

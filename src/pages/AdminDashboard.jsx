@@ -1,9 +1,9 @@
-import HomePage from "@/components/admin/HomePage";
-import InfoPage from "@/components/admin/InfoPage";
-import ProductInventoryTable from "@/components/admin/ProductInventoryTable";
-import OrdersPage from "@/components/admin/OrdersPage";
-import { Button } from "@/components/ui/button";
-import { UserData } from "@/context/UserContext";
+import HomePage from "@/components/admin/HomePage.jsx";
+import InfoPage from "@/components/admin/InfoPage.jsx";
+import ProductInventoryTable from "@/components/admin/ProductInventoryTable.jsx";
+import OrdersPage from "@/components/admin/OrdersPage.jsx";
+import { Button } from "@/components/ui/button.jsx";
+import { UserData } from "@/context/UserContext.jsx";
 import {
   Home,
   Info,
@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import UsersTable from "@/components/admin/UsersTable";
+import UsersTable from "@/components/admin/UsersTable.jsx";
 
 const AdminDashboard = () => {
   const [selectedPage, setSelectedPage] = useState("home");

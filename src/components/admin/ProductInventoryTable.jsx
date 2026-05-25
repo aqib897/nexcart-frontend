@@ -4,15 +4,15 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { server } from "@/main";
 import toast from "react-hot-toast";
-import { ProductData } from "@/context/ProductContext";
+import { ProductData } from "@/context/ProductContext.jsx";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
-} from "../ui/card";
-import { Input } from "../ui/input";
+} from "../ui/card.jsx";
+import { Input } from "../ui/input.jsx";
 
 const ITEMS_PER_PAGE = 10;
 

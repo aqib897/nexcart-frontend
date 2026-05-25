@@ -1,16 +1,16 @@
-import Loading from "@/components/Loading";
-import ProductCard from "@/components/ProductCard";
-import { Button } from "@/components/ui/button";
+import Loading from "@/components/Loading.jsx";
+import ProductCard from "@/components/ProductCard.jsx";
+import { Button } from "@/components/ui/button.jsx";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui/carousel";
-import { cartData } from "@/context/CartContext";
-import { ProductData } from "@/context/ProductContext";
-import { UserData } from "@/context/UserContext";
+} from "@/components/ui/carousel.jsx";
+import { cartData } from "@/context/CartContext.jsx";
+import { ProductData } from "@/context/ProductContext.jsx";
+import { UserData } from "@/context/UserContext.jsx";
 import { server } from "@/main";
 import Cookies from "js-cookie";
 import axios from "axios";
@@ -18,8 +18,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import { Edit, Loader2, X } from "lucide-react";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label.jsx";
+import { Input } from "@/components/ui/input.jsx";
 
 const ProductPage = () => {
   const { fetchProduct, product, relatedProduct, loading, categories } =
