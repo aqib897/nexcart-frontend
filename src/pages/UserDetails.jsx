@@ -59,7 +59,7 @@ const UserDetails = () => {
 
   const changeRole = async (role) => {
     try {
-      const { da.jsxta } = await axios.put(
+      const { data } = await axios.put(
         `${server}/api/user/${id}/role`,
         { role },
         {
