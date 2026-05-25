@@ -1,5 +1,5 @@
-import { ProductData } from "@/context/ProductContext";
-import Loading from "../Loading";
+import { ProductData } from "@/context/ProductContext.jsx";
+import Loading from "../Loading.jsx";
 import Cookies from "js-cookie";
 import ProductCard from "../ProductCard.jsx";
 import { Loader2 } from "lucide-react";

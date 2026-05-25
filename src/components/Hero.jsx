@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button.jsx";
 
 const Hero = ({ navigate }) => {
   return (
@@ -11,7 +11,7 @@ const Hero = ({ navigate }) => {
     >
       <div className="flex items-center justify-center h-ful text-center text-white">
         <div>
-          <h1 className="text-4xl sm:teext-6xl font-bold mb-6">
+          <h1 className="text-4xl sm:text-6xl font-bold mb-6">
             Welcome to your Dream Shop
           </h1>
           <p className="text-lg sm:text-2xl mb-8">

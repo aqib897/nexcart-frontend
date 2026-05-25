@@ -7,10 +7,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import { ModeToggle } from "./mode-toggle";
-import { UserData } from "@/context/UserContext";
-import { cartData } from "@/context/CartContext";
+} from "./ui/dropdown-menu.jsx";
+import { ModeToggle } from "./mode-toggle.jsx";
+import { UserData } from "@/context/UserContext.jsx";
+import { cartData } from "@/context/CartContext.jsx";
 
 const Navbar = () => {
   const navigate = useNavigate();

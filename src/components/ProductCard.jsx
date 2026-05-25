@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Badge } from "./ui/badge";
-import { Button } from "./ui/button";
+import { Badge } from "./ui/badge.jsx";
+import { Button } from "./ui/button.jsx";
 
 const ProductCard = ({ product, latest }) => {
   const navigate = useNavigate();
