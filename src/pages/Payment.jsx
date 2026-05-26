@@ -4,6 +4,7 @@ import { Separator } from "@/components/ui/separator.jsx";
 import { cartData } from "@/context/CartContext.jsx";
 import { server } from "@/main";
 import axios from "axios";
+import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
