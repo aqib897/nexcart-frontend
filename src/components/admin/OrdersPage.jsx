@@ -178,7 +178,12 @@ const OrdersPage = () => {
                     <div className="flex items-center gap-2">
                       <select
                         value={order.status}
-                        className="px-3 py-2 border rounded-md"
+                        className="
+    px-3 py-2 border rounded-md
+    bg-white text-black
+    dark:bg-zinc-900 dark:text-white dark:border-zinc-700
+    focus:outline-none
+  "
                         onChange={(e) =>
                           updateOrderStatus(order._id, e.target.value)
                         }
