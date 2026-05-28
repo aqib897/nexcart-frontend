@@ -651,7 +651,7 @@ dark:hover:bg-red-950
 hover:text-red-700
 transition-all duration-200
 cursor-pointer
-"
+">
                                   <Trash2 className="w-5 h-5" />
                                 </button>
                               )}
