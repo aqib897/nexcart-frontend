@@ -265,7 +265,7 @@ const ProductPage = () => {
           {product && (
             <div>
               <div className="flex flex-col lg:flex-row items-start gap-14">
-                <div className="w-72.5 md:w-162.5">
+                <div className="w-full lg:w-[500px] overflow-hidden rounded-2xl border">
                   <Carousel>
                     <CarouselContent>
                       {product.images &&
@@ -275,8 +275,10 @@ const ProductPage = () => {
                               src={image.url}
                               alt={`Product ${index + 1}`}
                               className="
-w-full rounded-2xl overflow-hidden object-cover
-transition duration-500 hover:scale-105
+w-full h-[500px] object-cover rounded-2xl
+transition-all duration-500
+hover:scale-105
+cursor-zoom-in
 "
                             />
                           </CarouselItem>
