@@ -66,7 +66,6 @@ const ProductPage = () => {
   const [category, setCategory] = useState("");
 
   const [btnLoading, setBtnLoading] = useState(false);
-  const [reviewName, setReviewName] = useState("");
   const [reviewComment, setReviewComment] = useState("");
   const [reviewRating, setReviewRating] = useState(5);
   const [wishlist, setWishlist] = useState(false);
@@ -164,8 +163,7 @@ const ProductPage = () => {
 
     try {
       const formData = new FormData();
-
-      formData.append("name", reviewName);
+      
       formData.append("rating", reviewRating);
       formData.append("comment", reviewComment);
 
@@ -532,11 +530,6 @@ cursor-zoom-in
                     onSubmit={submitReview}
                     className="space-y-5 border rounded-2xl p-6"
                   >
-                    <Input
-                      placeholder="Your Name"
-                      value={reviewName}
-                      onChange={(e) => setReviewName(e.target.value)}
-                    />
 
                     <textarea
                       placeholder="Write your review..."
