@@ -163,7 +163,7 @@ const Payment = () => {
                         "
                     >
                       <img
-                        src={e.product.images.?[0]?.url}
+                        src={e.product.images?.[0]?.url}
                         alt="image"
                         className="
                           w-24 h-24 object-cover
