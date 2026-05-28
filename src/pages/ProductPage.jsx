@@ -189,9 +189,10 @@ const ProductPage = () => {
 
       fetchProduct(id);
 
-      setReviewName("");
       setReviewComment("");
       setReviewRating(5);
+      setReviewImages([]);
+      setReviewVideos([]);
     } catch (error) {
       toast.error(error?.response?.data?.message || "Something went wrong");
     }
