@@ -6,7 +6,15 @@ import toast from "react-hot-toast";
 import { server } from "@/main";
 import { UserData } from "@/context/UserContext.jsx";
 import { Button } from "@/components/ui/button.jsx";
-import { Home } from "lucide-react";
+import {
+  Home,
+  Mail,
+  Shield,
+  MapPin,
+  Phone,
+  CalendarDays,
+  User2,
+} from "lucide-react";
 
 const UserDetails = () => {
   const { id } = useParams();
@@ -115,90 +123,269 @@ const UserDetails = () => {
       {role.role === "admin" ? (
         <>
           <div className="border rounded-xl p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h1 className="text-2xl font-bold">User Details</h1>
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
 
-              <div className="flex gap-2">
-                <button
-                  onClick={() => changeRole("admin")}
-                  className={`px-4 py-2 rounded-md text-sm ${
-                    user.role === "admin" ? "bg-black text-white" : "border"
-                  }`}
+              <div className="flex items-center gap-5">
+            
+                <div
+                  className="
+                  w-24 h-24 rounded-full
+                  bg-primary/10
+                  flex items-center justify-center
+                  text-4xl font-bold text-primary
+                  border
+                  "
                 >
-                  Admin
-                </button>
-
-                <button
-                  onClick={() => changeRole("user")}
-                  className={`px-4 py-2 rounded-md text-sm ${
-                    user.role === "user" ? "bg-black text-white" : "border"
-                  }`}
-                >
-                  User
-                </button>
-              </div>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="border rounded-lg p-4">
-                <p className="text-sm text-muted-foreground">Email</p>
-
-                <h2 className="font-semibold break-all">{user.email}</h2>
-              </div>
-
-              <div className="border rounded-lg p-4">
-                <p className="text-sm text-muted-foreground">Role</p>
-
-                <h2 className="font-semibold capitalize">{user.role}</h2>
-              </div>
-
-              <div className="border rounded-lg p-4">
-                <p className="text-sm text-muted-foreground">Created At</p>
-
-                <h2 className="font-semibold">
-                  {new Date(user.createdAt).toLocaleString()}
-                </h2>
-              </div>
-
-              <div className="border rounded-lg p-4">
-                <p className="text-sm text-muted-foreground">Updated At</p>
-
-                <h2 className="font-semibold">
-                  {new Date(user.updatedAt).toLocaleString()}
-                </h2>
-              </div>
-
-              <div className="border rounded-lg p-4 md:col-span-2">
-                <p className="text-sm text-muted-foreground mb-2">Addresses</p>
-
-                {addresses.length > 0 ? (
-                  <div className="space-y-3">
-                    {addresses.map((address) => (
-                      <div key={address._id} className="border rounded-md p-3">
-                        <p>
-                          <span className="font-medium">Phone:</span>{" "}
-                          {address.phone}
-                        </p>
-
-                        <p>
-                          <span className="font-medium">Address:</span>{" "}
-                          {address.address}
-                        </p>
-                      </div>
-                    ))}
+                  {user?.name?.charAt(0)?.toUpperCase()}
+                </div>
+            
+                <div className="space-y-2">
+            
+                  <h1 className="text-3xl font-bold">
+                    {user?.name}
+                  </h1>
+            
+                  <div className="flex flex-wrap gap-3">
+            
+                    <span
+                      className="
+                      px-4 py-1 rounded-full text-sm
+                      bg-primary text-primary-foreground
+                      "
+                    >
+                      {user?.role}
+                    </span>
+            
+                    <span
+                      className="
+                      px-4 py-1 rounded-full text-sm
+                      bg-muted
+                      "
+                    >
+                      Customer Account
+                    </span>
+            
                   </div>
-                ) : (
-                  <p>No Address Found</p>
-                )}
+            
+                </div>
+            
               </div>
+            
+              <div className="flex gap-3">
+            
+                <Button
+                  variant={
+                    user.role === "admin"
+                      ? "default"
+                      : "outline"
+                  }
+                  onClick={() => changeRole("admin")}
+                >
+                  Make Admin
+                </Button>
+            
+                <Button
+                  variant={
+                    user.role === "user"
+                      ? "default"
+                      : "outline"
+                  }
+                  onClick={() => changeRole("user")}
+                >
+                  Make User
+                </Button>
+            
+              </div>
+            
             </div>
+
+            <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-5">
+
+            <div className="border rounded-2xl p-5 bg-background shadow-sm">
+              <div className="flex items-center gap-3 mb-3">
+                <Mail className="w-5 h-5 text-primary" />
+                <p className="text-sm text-muted-foreground">
+                  Email
+                </p>
+              </div>
+          
+              <h2 className="font-semibold break-all">
+                {user.email}
+              </h2>
+            </div>
+          
+            <div className="border rounded-2xl p-5 bg-background shadow-sm">
+              <div className="flex items-center gap-3 mb-3">
+                <Shield className="w-5 h-5 text-primary" />
+                <p className="text-sm text-muted-foreground">
+                  Role
+                </p>
+              </div>
+          
+              <h2 className="font-semibold capitalize">
+                {user.role}
+              </h2>
+            </div>
+          
+            <div className="border rounded-2xl p-5 bg-background shadow-sm">
+              <div className="flex items-center gap-3 mb-3">
+                <CalendarDays className="w-5 h-5 text-primary" />
+                <p className="text-sm text-muted-foreground">
+                  Joined
+                </p>
+              </div>
+          
+              <h2 className="font-semibold">
+                {new Date(user.createdAt).toLocaleDateString()}
+              </h2>
+            </div>
+          
+            <div className="border rounded-2xl p-5 bg-background shadow-sm">
+              <div className="flex items-center gap-3 mb-3">
+                <User2 className="w-5 h-5 text-primary" />
+                <p className="text-sm text-muted-foreground">
+                  Last Updated
+                </p>
+              </div>
+          
+              <h2 className="font-semibold">
+                {new Date(user.updatedAt).toLocaleDateString()}
+              </h2>
+            </div>
+          
+          </div>
           </div>
 
+          <div className="mt-8">
+
+            <div className="flex items-center gap-3 mb-5">
+          
+              <MapPin className="w-6 h-6 text-primary" />
+          
+              <h2 className="text-2xl font-bold">
+                Saved Addresses
+              </h2>
+          
+            </div>
+          
+            {addresses.length > 0 ? (
+          
+              <div className="grid lg:grid-cols-2 gap-5">
+          
+                {addresses.map((address) => (
+          
+                  <div
+                    key={address._id}
+                    className="
+                    border rounded-2xl p-5
+                    bg-background
+                    shadow-sm
+                    hover:shadow-2xl
+                    hover:-translate-y-1
+                    transition-all duration-300
+                    "
+                  >
+          
+                    <div className="flex items-start justify-between mb-4">
+          
+                      <div>
+          
+                        <h3 className="font-bold text-lg">
+                          {address.firstName}{" "}
+                          {address.lastName}
+                        </h3>
+          
+                        <div className="flex items-center gap-2 mt-1">
+          
+                          <Phone className="w-4 h-4 text-muted-foreground" />
+          
+                          <p className="text-sm text-muted-foreground">
+                            +91 {address.phone}
+                          </p>
+          
+                        </div>
+          
+                      </div>
+          
+                      <span
+                        className="
+                        px-3 py-1 rounded-full text-xs
+                        bg-primary text-primary-foreground
+                        "
+                      >
+                        {address.type}
+                      </span>
+          
+                    </div>
+          
+                    <div className="space-y-1 text-sm text-muted-foreground leading-6">
+          
+                      <p>{address.address1}</p>
+          
+                      {address.address2 && (
+                        <p>{address.address2}</p>
+                      )}
+          
+                      {address.landmark && (
+                        <p>
+                          Landmark: {address.landmark}
+                        </p>
+                      )}
+          
+                      <p>
+                        {address.city}, {address.state}
+                      </p>
+          
+                      <p>{address.pincode}</p>
+          
+                    </div>
+          
+                  </div>
+          
+                ))}
+          
+              </div>
+          
+            ) : (
+          
+              <div
+                className="
+                border rounded-2xl p-10
+                text-center text-muted-foreground
+                "
+              >
+                No Address Found
+              </div>
+          
+            )}
+          
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* TOTAL */}
+            <div
+              className="
+              border rounded-3xl p-6
+              bg-green-500 text-white
+              shadow-xl
+              "
+            >
+              <p className="text-sm opacity-80">
+                Total Spent
+              </p>
+            
+              <h2 className="text-3xl font-bold mt-2">
+                ₹
+                {orders.reduce(
+                  (acc, item) => acc + item.subTotal,
+                  0,
+                )}
+              </h2>
+            </div>
             <div
               onClick={() => setActiveSection("total")}
-              className={`border rounded-xl p-5 cursor-pointer transition-all hover:scale-[1.02]
+              className={`border rounded-3xl p-6 cursor-pointer
+                    transition-all duration-300
+                    hover:scale-[1.03]
+                    hover:shadow-xl
       ${activeSection === "total" ? "bg-primary text-primary-foreground" : ""}
     `}
             >
@@ -210,7 +397,10 @@ const UserDetails = () => {
             {/* CURRENT */}
             <div
               onClick={() => setActiveSection("current")}
-              className={`border rounded-xl p-5 cursor-pointer transition-all hover:scale-[1.02]
+              className={`border rounded-3xl p-6 cursor-pointer
+                  transition-all duration-300
+                  hover:scale-[1.03]
+                  hover:shadow-xl
       ${activeSection === "current" ? "bg-primary text-primary-foreground" : ""}
     `}
             >
@@ -228,7 +418,10 @@ const UserDetails = () => {
             {/* PREVIOUS */}
             <div
               onClick={() => setActiveSection("previous")}
-              className={`border rounded-xl p-5 cursor-pointer transition-all hover:scale-[1.02]
+              className={`border rounded-3xl p-6 cursor-pointer
+                    transition-all duration-300
+                    hover:scale-[1.03]
+                    hover:shadow-xl
       ${
         activeSection === "previous" ? "bg-primary text-primary-foreground" : ""
       }
@@ -315,7 +508,13 @@ const UserDetails = () => {
                           {order.items?.map((item, index) => (
                             <div
                               key={index}
-                              className="flex items-center gap-4 border rounded-xl p-4 bg-muted/30"
+                              className="
+                                flex items-center gap-4
+                                border rounded-2xl p-4
+                                bg-muted/30
+                                hover:bg-muted/50
+                                transition-all
+                                "
                             >
                               <img
                                 src={item.product?.images?.[0]?.url}
