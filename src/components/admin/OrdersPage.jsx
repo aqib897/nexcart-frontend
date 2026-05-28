@@ -102,7 +102,7 @@ const OrdersPage = () => {
   });
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold">Manage Orders</h1>
+      <h1 className="text-4xl font-extrabold tracking-tight">Manage Orders</h1>
 
       <Input
         placeholder="Search by title, email, status or Order Id"
@@ -113,8 +113,8 @@ const OrdersPage = () => {
       {loading ? (
         <Loading />
       ) : filteredOrders.length > 0 ? (
-        <div className="overflow-x-auto">
-          <Table>
+        <div className="rounded-2xl border">
+          <Table className="w-full">
             <TableHeader>
               <TableRow>
                 <TableHead>Order ID</TableHead>
@@ -131,16 +131,27 @@ const OrdersPage = () => {
                   <TableCell>
                     <Link
                       to={`/order/${order._id}`}
-                      className="flex items-center gap-3"
+                      className="flex items-start gap-3"
                     >
                       <img
                         src={order.items?.[0]?.product?.images?.[0]?.url}
                         alt={order.items[0]?.product?.title}
-                        className="w-12 h-12 object-cover rounded-md border"
+                        className="
+                          w-12 h-12 min-w-12
+                          object-cover rounded-md border
+                          "
                       />
 
-                      <div className="flex flex-col">
-                        <span className="font-medium line-clamp-1">
+                      <div className="flex flex-col flex-1 overflow-hidden">
+                        <span
+                          className="
+                          font-medium
+                          text-sm
+                          leading-5
+                          break-words
+                          whitespace-normal
+                          "
+                        >
                           {order.items?.[0]?.product?.title || "Product Removed"}
                         </span>
 
@@ -199,12 +210,11 @@ const OrdersPage = () => {
                       <button
                         onClick={() => deleteOrder(order._id)}
                         className="
-        text-sm font-bold
-        hover:text-red-500
-        opacity-0 pointer-events-none
-        group-hover:opacity-100 group-hover:pointer-events-auto
-        transition-all duration-200
-      "
+                        text-sm font-bold
+                        text-red-500
+                        hover:text-red-700
+                        transition-all duration-200
+                        "
                       >
                         ✕
                       </button>
