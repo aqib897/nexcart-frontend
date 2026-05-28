@@ -60,6 +60,7 @@ const ProductPage = () => {
   const [reviewName, setReviewName] = useState("");
   const [reviewComment, setReviewComment] = useState("");
   const [reviewRating, setReviewRating] = useState(5);
+  const [wishlist, setWishlist] = useState(false);
 
   const reviews = product?.reviews || [];
 
@@ -140,7 +141,13 @@ const ProductPage = () => {
     }
   };
 
-  const submitReview = async () => {
+  const submitReview = async (e) => {
+    e.preventDefault();
+
+    if (!reviewName || !reviewComment) {
+      return toast.error("Please fill all fields");
+    }
+
     try {
       const { data } = await axios.post(
         `${server}/api/product/${id}/review`,
@@ -164,7 +171,7 @@ const ProductPage = () => {
       setReviewComment("");
       setReviewRating(5);
     } catch (error) {
-      toast.error(error.response?.data?.message);
+      toast.error(error?.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -256,40 +263,44 @@ const ProductPage = () => {
             </div>
           )}
           {product && (
-            <div className="flex flex-col lg:flex-row items-start gap-14">
-              <div className="w-72.5 md:w-162.5">
-                <Carousel>
-                  <CarouselContent>
-                    {product.images &&
-                      product.images.map((image, index) => (
-                        <CarouselItem key={index}>
-                          <img
-                            src={image.url}
-                            alt={`Product ${index + 1}`}
-                            className="w-ful rounded-md object-cover"
-                          />
-                        </CarouselItem>
-                      ))}
-                  </CarouselContent>
-                  <CarouselPrevious />
-                  <CarouselNext />
-                </Carousel>
+            <div>
+              <div className="flex flex-col lg:flex-row items-start gap-14">
+                <div className="w-72.5 md:w-162.5">
+                  <Carousel>
+                    <CarouselContent>
+                      {product.images &&
+                        product.images.map((image, index) => (
+                          <CarouselItem key={index}>
+                            <img
+                              src={image.url}
+                              alt={`Product ${index + 1}`}
+                              className="
+w-full rounded-2xl object-cover
+transition duration-500 hover:scale-105
+"
+                            />
+                          </CarouselItem>
+                        ))}
+                    </CarouselContent>
+                    <CarouselPrevious />
+                    <CarouselNext />
+                  </Carousel>
 
-                {user && user.role === "admin" && (
-                  <form
-                    onSubmit={handleSubmitImage}
-                    className="flex flex-col gap-4"
-                  >
-                    <div>
-                      <Label className="mb-4 mt-4">Upload New Images:</Label>
-                      <input
-                        type="file"
-                        name="files"
-                        id="files"
-                        multiple
-                        accept="image/*"
-                        onChange={(e) => setUpdatedImages(e.target.files)}
-                        className="
+                  {user && user.role === "admin" && (
+                    <form
+                      onSubmit={handleSubmitImage}
+                      className="flex flex-col gap-4"
+                    >
+                      <div>
+                        <Label className="mb-4 mt-4">Upload New Images:</Label>
+                        <input
+                          type="file"
+                          name="files"
+                          id="files"
+                          multiple
+                          accept="image/*"
+                          onChange={(e) => setUpdatedImages(e.target.files)}
+                          className="
     
     cursor-pointer
     border             
@@ -309,121 +320,149 @@ const ProductPage = () => {
     file:transition-all
     file:duration-200
   "
-                      />
-                    </div>
-                    <Button
-                      type="submit"
-                      className="w-full"
-                      disabled={btnLoading}
-                    >
-                      {btnLoading ? (
-                        <>
-                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                          Updating Images...
-                        </>
-                      ) : (
-                        "Update Images"
-                      )}
-                    </Button>
-                  </form>
-                )}
-              </div>
-
-              <div className="w-full lg:w-1/2 space-y-6">
-                <div className="flex items-center gap-3">
-                  <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm">
-                    Bestseller
-                  </span>
-
-                  <button className="border rounded-full p-2 hover:bg-red-100 transition">
-                    <Heart className="w-5 h-5" />
-                  </button>
+                        />
+                      </div>
+                      <Button
+                        type="submit"
+                        className="w-full"
+                        disabled={btnLoading}
+                      >
+                        {btnLoading ? (
+                          <>
+                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                            Updating Images...
+                          </>
+                        ) : (
+                          "Update Images"
+                        )}
+                      </Button>
+                    </form>
+                  )}
                 </div>
 
-                <h1 className="text-4xl font-bold leading-tight">
-                  {product.title}
-                </h1>
+                <div className="w-full lg:w-1/2 space-y-6 sticky top-24">
+                  <div className="flex items-center gap-3">
+                    <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm">
+                      Bestseller
+                    </span>
 
-                <div className="flex items-center gap-2">
-                  <div className="flex">
-                    {[1, 2, 3, 4, 5].map((i) => (
-                      <Star
-                        key={i}
+                    <button
+                      onClick={() => setWishlist(!wishlist)}
+                      className="border rounded-full p-2 hover:bg-red-100 transition"
+                    >
+                      <Heart
                         className={`w-5 h-5 ${
-                          i <= Math.round(averageRating)
-                            ? "fill-yellow-400 text-yellow-400"
-                            : "text-gray-300"
+                          wishlist ? "fill-red-500 text-red-500" : ""
                         }`}
                       />
-                    ))}
+                    </button>
                   </div>
 
-                  <span className="font-medium">
-                    {averageRating.toFixed(1)}
-                  </span>
+                  <h1 className="text-4xl font-bold leading-tight">
+                    {product.title}
+                  </h1>
 
-                  <span className="text-muted-foreground">
-                    ({product.numReviews} reviews)
-                  </span>
-                </div>
+                  <div className="flex items-center gap-2">
+                    <div className="flex">
+                      {[1, 2, 3, 4, 5].map((i) => (
+                        <Star
+                          key={i}
+                          className={`w-5 h-5 ${
+                            i <= Math.round(averageRating)
+                              ? "fill-yellow-400 text-yellow-400"
+                              : "text-gray-300"
+                          }`}
+                        />
+                      ))}
+                    </div>
 
-                <p className="text-4xl font-bold text-primary">
-                  ₹ {product.price}
-                </p>
+                    <span className="font-medium">
+                      {averageRating.toFixed(1)}
+                    </span>
 
-                <p className="text-lg leading-7 text-muted-foreground">
-                  {product.description}
-                </p>
+                    <div className="text-muted-foreground">
+                      ({product.numReviews} reviews)
+                      <div className="space-y-2 pt-4">
+                        {[5, 4, 3, 2, 1].map((star) => (
+                          <div key={star} className="flex items-center gap-3">
+                            <span className="text-sm w-6">{star}★</span>
 
-                <div className="border rounded-2xl p-5 bg-muted/40 space-y-4">
-                  <div className="flex items-center gap-3">
-                    <Truck className="w-5 h-5 text-green-500" />
-                    <span>Free delivery within 3-5 days</span>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <RotateCcw className="w-5 h-5 text-blue-500" />
-                    <span>7 Days Easy Return</span>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <ShieldCheck className="w-5 h-5 text-purple-500" />
-                    <span>100% Secure Payments</span>
-                  </div>
-                </div>
-
-                {isAuth ? (
-                  <>
-                    {product.stock <= 0 ? (
-                      <p className="text-red-600 text-2xl font-semibold">
-                        Out of Stock
-                      </p>
-                    ) : (
-                      <div className="space-y-4">
-                        <p className="text-green-600 font-medium">
-                          In Stock ({product.stock} left)
-                        </p>
-
-                        <Button
-                          onClick={addToCartHandler}
-                          className="w-full h-12 text-lg rounded-xl cursor-pointer"
-                        >
-                          Add To Cart
-                        </Button>
+                            <div className="flex-1 bg-gray-200 rounded-full h-2">
+                              <div
+                                className="bg-yellow-400 h-2 rounded-full"
+                                style={{
+                                  width: `${Math.random() * 100}%`,
+                                }}
+                              />
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                    )}
-                  </>
-                ) : (
-                  <p className="text-blue-500">
-                    Please Login to add something in cart
+                    </div>
+                  </div>
+
+                  <p className="text-4xl font-bold text-primary">
+                    ₹ {product.price}
                   </p>
-                )}
+
+                  <p className="text-lg leading-7 text-muted-foreground">
+                    {product.description}
+                  </p>
+
+                  <div className="border rounded-2xl p-5 bg-muted/40 space-y-4">
+                    <div className="flex items-center gap-3">
+                      <Truck className="w-5 h-5 text-green-500" />
+                      <span>Free delivery within 3-5 days</span>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <RotateCcw className="w-5 h-5 text-blue-500" />
+                      <span>7 Days Easy Return</span>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <ShieldCheck className="w-5 h-5 text-purple-500" />
+                      <span>100% Secure Payments</span>
+                    </div>
+                  </div>
+
+                  {isAuth ? (
+                    <>
+                      {product.stock <= 0 ? (
+                        <p className="text-red-600 text-2xl font-semibold">
+                          Out of Stock
+                        </p>
+                      ) : (
+                        <div className="space-y-4">
+                          <p className="text-green-600 font-medium">
+                            In Stock ({product.stock} left)
+                          </p>
+
+                          <Button
+                            onClick={addToCartHandler}
+                            className="w-full h-12 text-lg rounded-xl cursor-pointer"
+                          >
+                            Add To Cart
+                          </Button>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <p className="text-blue-500">
+                      Please Login to add something in cart
+                    </p>
+                  )}
+                </div>
               </div>
+
               <div className="mt-20">
                 <h2 className="text-3xl font-bold mb-10">Customer Reviews</h2>
 
                 <div className="grid lg:grid-cols-2 gap-10">
-                  <div className="space-y-5 border rounded-2xl p-6">
+                  <form
+                    onSubmit={submitReview}
+                    className="space-y-5 border rounded-2xl p-6"
+                  >
                     <Input
                       placeholder="Your Name"
                       value={reviewName}
@@ -449,17 +488,21 @@ const ProductPage = () => {
                       <option value={1}>1 Star</option>
                     </select>
 
-                    <Button onClick={submitReview} className="w-full">
+                    <Button type="submit" className="w-full">
                       Submit Review
                     </Button>
-                  </div>
+                  </form>
 
                   <div className="space-y-5">
                     {reviews.length > 0 ? (
                       reviews.map((review, index) => (
                         <div
                           key={index}
-                          className="border rounded-2xl p-5 bg-muted/30"
+                          className="
+border rounded-2xl p-5 bg-muted/30
+hover:shadow-xl transition-all duration-300
+hover:-translate-y-1
+"
                         >
                           <div className="flex items-center justify-between">
                             <div>
@@ -497,6 +540,7 @@ const ProductPage = () => {
                   </div>
                 </div>
               </div>
+
               <div className="mt-20 grid md:grid-cols-3 gap-6">
                 <div className="border rounded-2xl p-6 hover:shadow-lg transition">
                   <BadgeCheck className="w-10 h-10 mb-4 text-green-500" />
