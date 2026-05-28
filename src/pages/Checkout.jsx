@@ -54,45 +54,30 @@ const fetchPincodeDetails = async (
 
   try {
 
-    const res = await axios.get(
-      `https://api.postalpincode.in/pincode/${pin.trim()}`
+    const { data } = await axios.get(
+      `${server}/api/address/pincode/${pin}`
     );
 
-    const data = res.data[0];
+    if (isEdit) {
 
-    if (
-      data.Status === "Success" &&
-      data.PostOffice?.length > 0
-    ) {
+      setEditAddress((prev) => ({
+        ...prev,
+        city: data.city,
+        state: data.state,
+      }));
 
-      const city =
-        data.PostOffice[0].District;
+    } else {
 
-      const state =
-        data.PostOffice[0].State;
-
-      if (isEdit) {
-
-        setEditAddress((prev) => ({
-          ...prev,
-          city,
-          state,
-        }));
-
-      } else {
-
-        setNewAddress((prev) => ({
-          ...prev,
-          city,
-          state,
-        }));
-      }
-
+      setNewAddress((prev) => ({
+        ...prev,
+        city: data.city,
+        state: data.state,
+      }));
     }
 
   } catch (error) {
 
-    console.log("Pincode API failed");
+    console.log(error);
 
   }
 };
