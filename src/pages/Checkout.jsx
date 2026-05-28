@@ -55,7 +55,7 @@ const fetchPincodeDetails = async (
   try {
 
     const { data } = await axios.get(
-      `${server}/api/address/pincode/${pin}`
+      `${server}/api/pincode/${pin}`
     );
 
     if (isEdit) {
