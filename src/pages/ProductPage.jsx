@@ -157,7 +157,7 @@ const ProductPage = () => {
   const submitReview = async (e) => {
     e.preventDefault();
 
-    if (!reviewName || !reviewComment) {
+    if (!reviewComment) {
       return toast.error("Please fill all fields");
     }
 
