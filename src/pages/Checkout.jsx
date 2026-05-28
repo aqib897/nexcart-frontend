@@ -450,7 +450,7 @@ const fetchPincodeDetails = async (
                   pincode: e.target.value,
                 });
           
-                fetchPincodeDetails(e.target.value);
+                fetchPincodeDetails(e.target.value);  
               }}
             />
           
