@@ -44,7 +44,16 @@ const Payment = () => {
     fetchAddress();
   }, [id]);
 
+  useEffect(() => {
+  if (!loading && cart.length === 0) {
+    navigate("/");
+  }
+}, [cart, loading]);
+
   const paymentHandler = async () => {
+    if (!method) {
+      return toast.error("Please select payment method");
+    }
     if (method === "cod") {
       setLoading(true);
       try {
@@ -52,8 +61,15 @@ const Payment = () => {
           `${server}/api/order/new/cod`,
           {
             method,
+            name: `${address.firstName} ${address.lastName}`,
             phone: address.phone,
-            address: address.address,
+            address: `
+                  ${address.address1},
+                  ${address.address2 || ""}
+                  ${address.landmark ? `, Landmark: ${address.landmark}` : ""}
+                  ${address.city},
+                  ${address.state} - ${address.pincode}
+                  `,
           },
           {
             headers: {
@@ -80,8 +96,15 @@ const Payment = () => {
           `${server}/api/order/new/online`,
           {
             method,
+            name: `${address.firstName} ${address.lastName}`,
             phone: address.phone,
-            address: address.address,
+            address: `
+            ${address.address1},
+            ${address.address2 || ""}
+            ${address.landmark ? `, Landmark: ${address.landmark}` : ""}
+            ${address.city},
+            ${address.state} - ${address.pincode}
+            `,
           },
           {
             headers: {
@@ -105,10 +128,6 @@ const Payment = () => {
       }
     }
   };
-
-  if (!loading && cart.length === 0) {
-  navigate("/");
-}
   return (
     <div>
       {loading ? (
@@ -117,7 +136,7 @@ const Payment = () => {
        <div className="container mx-auto px-4 py-10">
           <div className="grid lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-8">
-            <h2 className="text-4xl font-bold text-center mb-2">
+            <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-2 tracking-tight">
               Proceed to Payment
             </h2>
             <p className="text-center text-muted-foreground mb-10">
@@ -144,7 +163,7 @@ const Payment = () => {
                         "
                     >
                       <img
-                        src={e.product.images[0].url}
+                        src={e.product.images.?[0]?.url}
                         alt="image"
                         className="
                           w-24 h-24 object-cover
@@ -177,12 +196,13 @@ const Payment = () => {
               <div
                   className="
                   border rounded-3xl
-                  p-6 shadow-sm
-                  bg-background
+                  p-6 shadow-xl
+                  bg-background/80
+                  backdrop-blur
                   space-y-6
                   "
                 >
-                <h3 className="text-lg font-semibold text-center">Details</h3>
+                <h3 className="text-2xl font-bold text-center tracking-tight">Details</h3>
                 <Separator className="my-2" />
 
                 <div className="flex flex-col space-y-4">
@@ -203,6 +223,8 @@ const Payment = () => {
                       border rounded-2xl p-5
                       bg-muted/20
                       space-y-3
+                      hover:shadow-lg
+                      transition-all duration-300
                       "
                     >
                   
@@ -277,10 +299,12 @@ const Payment = () => {
                       onChange={(e) => setMethod(e.target.value)}
                       className="
                         w-full p-4 border rounded-2xl
-                        bg-background
+                        bg-background/80
+                        backdrop-blur
                         outline-none
                         focus:ring-2 focus:ring-primary/30
-                        transition-all
+                        hover:border-primary/40
+                        transition-all duration-300
                         "
                       >
                       <option value="">Select Payment Method</option>
