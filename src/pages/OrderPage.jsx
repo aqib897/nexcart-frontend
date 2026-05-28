@@ -10,7 +10,16 @@ import { UserData } from "@/context/UserContext.jsx";
 import { server } from "@/main";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { Home } from "lucide-react";
+import {
+  Home,
+  PackageCheck,
+  MapPin,
+  Phone,
+  CreditCard,
+  CalendarDays,
+  Truck,
+  Printer,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
@@ -57,22 +66,49 @@ const OrderPage = () => {
     );
   }
   return (
-    <div className="container mx-auto py-6 px-4">
+    <div className="container mx-auto py-10 px-4">
       {user._id === order.user._id || user.role === "admin" ? (
         <>
-          <Card className="mb-6">
+          <Card
+            className="
+            mb-8 border-0
+            shadow-2xl
+            rounded-3xl
+            overflow-hidden
+            bg-background/80
+            backdrop-blur
+            "
+          >
             <CardHeader>
-              <div className="flex justify-between">
-                <CardTitle className="text-2xl font-bold">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <CardTitle className="text-4xl font-extrabold tracking-tight flex items-center gap-3">
+                  <PackageCheck className="w-10 h-10 text-primary" />
                   Order Details
                 </CardTitle>
-                <Button onClick={() => window.print()}>Print Order</Button>
+                <Button
+                onClick={() => window.print()}
+                className="
+                rounded-2xl h-12 px-6
+                hover:scale-[1.03]
+                transition-all duration-300
+                "
+              >
+                <Printer className="w-5 h-5 mr-2" />
+                Print Order
+              </Button>
               </div>
             </CardHeader>
 
             <CardContent>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div
+                    className="
+                    border rounded-3xl
+                    p-6 bg-muted/20
+                    shadow-sm
+                    space-y-4
+                    "
+                  >
                   <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
                   <p>
                     <strong>Order Id: </strong>
@@ -119,19 +155,90 @@ const OrderPage = () => {
                     {order.paidAt || "Payment through COD"}
                   </p>
                 </div>
-                <div>
+                <div
+                  className="
+                  border rounded-3xl
+                  p-6 bg-muted/20
+                  shadow-sm
+                  space-y-4
+                  "
+                >
                   <h2 className="text-xl font-semibold mb-4">
                     Shipping Details
                   </h2>
-                  <p>
-                    <strong>Phone: </strong> {order.phone}
-                  </p>
-                  <p>
-                    <strong>Address: </strong> {order.address}
-                  </p>
-                  <p>
-                    <strong>User: </strong> {order.user?.email || "Guest"}
-                  </p>
+                  <div className="space-y-5">
+
+                  <div className="flex items-start gap-3">
+                    <Phone className="w-5 h-5 text-primary mt-1" />
+                
+                    <div>
+                      <p className="text-sm text-muted-foreground">
+                        Phone Number
+                      </p>
+                
+                      <h3 className="font-semibold text-lg">
+                        +91 {order.phone}
+                      </h3>
+                    </div>
+                  </div>
+                
+                  <div className="flex items-start gap-3">
+                    <MapPin className="w-5 h-5 text-primary mt-1" />
+                
+                    <div>
+                      <p className="text-sm text-muted-foreground">
+                        Delivery Address
+                      </p>
+                
+                      <h3 className="font-medium leading-7 whitespace-pre-line">
+                        {order.address}
+                      </h3>
+                    </div>
+                  </div>
+                
+                  <div className="flex items-start gap-3">
+                    <CreditCard className="w-5 h-5 text-primary mt-1" />
+                
+                    <div>
+                      <p className="text-sm text-muted-foreground">
+                        Payment Method
+                      </p>
+                
+                      <h3 className="font-semibold capitalize">
+                        {order.method}
+                      </h3>
+                    </div>
+                  </div>
+                
+                  <div className="flex items-start gap-3">
+                    <Truck className="w-5 h-5 text-primary mt-1" />
+                
+                    <div>
+                      <p className="text-sm text-muted-foreground">
+                        Order Status
+                      </p>
+                
+                      <h3 className="font-semibold">
+                        {order.status}
+                      </h3>
+                    </div>
+                  </div>
+                
+                  <div className="flex items-start gap-3">
+                    <CalendarDays className="w-5 h-5 text-primary mt-1" />
+                
+                    <div>
+                      <p className="text-sm text-muted-foreground">
+                        Ordered By
+                      </p>
+                
+                      <h3 className="font-semibold break-all">
+                        {order.user?.email || "Guest"}
+                      </h3>
+                    </div>
+                  </div>
+                
+                </div>
                 </div>
               </div>
             </CardContent>
@@ -139,16 +246,28 @@ const OrderPage = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {order.items.map((e, i) => (
-              <Card key={i}>
+              <Card
+                key={i}
+                className="
+                rounded-3xl overflow-hidden
+                border-0 shadow-lg
+                hover:shadow-2xl
+                hover:-translate-y-1
+                transition-all duration-300
+                "
+              >
                 <Link to={`/product/${e.product._id}`}>
                   <img
                     src={e.product.images[0]?.url}
                     alt={e.product.title}
-                    className="max-w-full max-h-full object-contain"
+                    className="
+                    w-full h-64 object-cover
+                    bg-muted/20
+                    "
                   />
                 </Link>
 
-                <CardContent>
+                 <CardContent className="p-5 space-y-2">
                   <h3 className="text-lg font-semibold">{e.product.title}</h3>
                   <p>
                     <strong>Quantity: </strong>
