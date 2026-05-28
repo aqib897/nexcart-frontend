@@ -13,6 +13,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog.jsx";
 import { Input } from "@/components/ui/input.jsx";
 
@@ -217,6 +218,59 @@ const Checkout = () => {
       }
     }
   };
+  const fetchPincodeDetails = async (
+  pin,
+  isEdit = false
+) => {
+
+  if (pin.length !== 6) return;
+
+  try {
+
+    const res = await axios.get(
+      `https://api.postalpincode.in/pincode/${pin.trim()}`
+    );
+
+    const data = res.data[0];
+
+    if (
+      data.Status === "Success" &&
+      data.PostOffice?.length > 0
+    ) {
+
+      const city =
+        data.PostOffice[0].District;
+
+      const state =
+        data.PostOffice[0].State;
+
+      if (isEdit) {
+
+        setEditAddress((prev) => ({
+          ...prev,
+          city,
+          state,
+        }));
+
+      } else {
+
+        setNewAddress((prev) => ({
+          ...prev,
+          city,
+          state,
+        }));
+      }
+
+    }
+
+  } catch (error) {
+
+    console.log(
+      "Pincode fetch failed:",
+      error.message
+    );
+  }
+};
   return (
     <div className="container mx-auto px-4 py-8 min-h-[60vh]">
       <h1 className="text-3xl font-bold mb-6 text-center">Checkout</h1>
@@ -356,6 +410,7 @@ const Checkout = () => {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Add New Address</DialogTitle>
+            <DialogDescription> Add your delivery address details. </DialogDescription>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
             <Input
@@ -489,6 +544,7 @@ const Checkout = () => {
       <Dialog open={editModalOpen} onOpenChange={setEditModalOpen}>
         <DialogContent>
           <DialogHeader>
+            <DialogDescription> Update your delivery address. </DialogDescription>
             <DialogTitle>Edit Address</DialogTitle>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
