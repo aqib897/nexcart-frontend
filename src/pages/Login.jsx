@@ -20,9 +20,10 @@ const Login = () => {
   const navigate = useNavigate();
 
   const { loginUser, btnLoading } = UserData();
+  const [name, setName] = useState("");
 
   const submitHandler = () => {
-    loginUser(email, navigate);
+    loginUser(name, email, navigate);
   };
   return (
     <div className="min-h-[60vh]">
@@ -36,7 +37,16 @@ const Login = () => {
         </CardHeader>
 
         <CardContent className="space-y-2">
-          <div className="space-x-1">
+          <div className="space-y-1">
+            <Label className="mb-1">Enter Name</Label>
+
+            <Input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+          <div className="space-y-1">
             <Label className="mb-1">Enter Email</Label>
 
             <Input
