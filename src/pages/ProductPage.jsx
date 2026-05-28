@@ -32,6 +32,13 @@ import {
 } from "lucide-react";
 import { Label } from "@/components/ui/label.jsx";
 import { Input } from "@/components/ui/input.jsx";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog.jsx";
 
 const ProductPage = () => {
   const { fetchProduct, product, relatedProduct, loading, categories } =
@@ -66,6 +73,8 @@ const ProductPage = () => {
   const [editingReview, setEditingReview] = useState(null);
   const [reviewImages, setReviewImages] = useState([]);
   const [reviewVideos, setReviewVideos] = useState([]);
+  const [editComment, setEditComment] = useState("");
+  const [editRating, setEditRating] = useState(5);
 
   const reviews = product?.reviews || [];
 
@@ -203,6 +212,31 @@ const ProductPage = () => {
       toast.success(data.message);
 
       fetchProduct(id);
+    } catch (error) {
+      toast.error(error.response?.data?.message);
+    }
+  };
+
+  const updateReview = async () => {
+    try {
+      const { data } = await axios.put(
+        `${server}/api/product/${id}/review/${editingReview._id}`,
+        {
+          comment: editComment,
+          rating: editRating,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
+        },
+      );
+
+      toast.success(data.message);
+
+      fetchProduct(id);
+
+      setEditingReview(null);
     } catch (error) {
       toast.error(error.response?.data?.message);
     }
@@ -587,8 +621,20 @@ hover:-translate-y-1
                               </div>
                               {user?._id === review.user?.toString() && (
                                 <button
-                                  onClick={() => setEditingReview(review)}
-                                  className="text-blue-500"
+                                  onClick={() => {
+                                    setEditingReview(review);
+                                    setEditComment(review.comment);
+                                    setEditRating(review.rating);
+                                  }}
+                                  className="
+p-2 rounded-full
+text-blue-500
+hover:bg-blue-100
+dark:hover:bg-blue-950
+hover:text-blue-700
+transition-all duration-200
+cursor-pointer
+"
                                 >
                                   <Pencil className="w-5 h-5" />
                                 </button>
@@ -597,8 +643,15 @@ hover:-translate-y-1
                                 user?.role === "admin") && (
                                 <button
                                   onClick={() => deleteReview(review._id)}
-                                  className="text-red-500 hover:text-red-700"
-                                >
+                                  className="
+p-2 rounded-full
+text-red-500
+hover:bg-red-100
+dark:hover:bg-red-950
+hover:text-red-700
+transition-all duration-200
+cursor-pointer
+"
                                   <Trash2 className="w-5 h-5" />
                                 </button>
                               )}
@@ -642,6 +695,58 @@ hover:-translate-y-1
                   </div>
                 </div>
               </div>
+
+              <Dialog
+                open={!!editingReview}
+                onOpenChange={() => setEditingReview(null)}
+              >
+                <DialogContent className="sm:max-w-[500px] rounded-2xl">
+                  <DialogHeader>
+                    <DialogTitle className="text-2xl font-bold">
+                      Edit Review
+                    </DialogTitle>
+                  </DialogHeader>
+
+                  <div className="space-y-5 py-4">
+                    <textarea
+                      value={editComment}
+                      onChange={(e) => setEditComment(e.target.value)}
+                      placeholder="Update your review..."
+                      className="
+        w-full border rounded-xl p-4
+        min-h-[140px]
+        bg-background
+        "
+                    />
+
+                    <select
+                      value={editRating}
+                      onChange={(e) => setEditRating(Number(e.target.value))}
+                      className="
+        w-full border rounded-xl p-3
+        bg-background dark:bg-gray-900
+        "
+                    >
+                      <option value={5}>5 Stars</option>
+                      <option value={4}>4 Stars</option>
+                      <option value={3}>3 Stars</option>
+                      <option value={2}>2 Stars</option>
+                      <option value={1}>1 Star</option>
+                    </select>
+                  </div>
+
+                  <DialogFooter>
+                    <Button
+                      variant="outline"
+                      onClick={() => setEditingReview(null)}
+                    >
+                      Cancel
+                    </Button>
+
+                    <Button onClick={updateReview}>Update Review</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
 
               <div className="mt-20 grid md:grid-cols-3 gap-6">
                 <div className="border rounded-2xl p-6 hover:shadow-lg transition">
