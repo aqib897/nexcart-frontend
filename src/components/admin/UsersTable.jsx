@@ -55,7 +55,7 @@ const UsersTable = () => {
     return (
       user.email?.toLowerCase().includes(query) ||
       String(user.phone)?.toLowerCase().includes(query) ||
-      user.address?.toLowerCase().includes(query) ||
+      user.fullAddress?.toLowerCase().includes(query) ||
       user.role?.toLowerCase().includes(query)
     );
   });
@@ -74,13 +74,22 @@ const UsersTable = () => {
         />
       </div>
 
-      <div className="overflow-x-auto border rounded-lg">
+      <div
+          className="
+          overflow-x-auto
+          border rounded-2xl
+          shadow-sm
+          bg-background
+          "
+        >
         <table className="w-full">
           <thead className="bg-muted">
             <tr>
+              <th className="p-4 text-left">User</th>
               <th className="p-4 text-left">Email</th>
               <th className="p-4 text-left">Phone</th>
               <th className="p-4 text-left">Address</th>
+              <th className="p-4 text-left">Type</th>
               <th className="p-4 text-left">Role</th>
             </tr>
           </thead>
@@ -92,15 +101,73 @@ const UsersTable = () => {
                 onClick={() => navigate(`/admin/user/${user._id}`)}
                 className="border-t cursor-pointer hover:bg-muted/50 group"
               >
-                <td className="p-4">{user.email}</td>
+
+                <td className="p-4">
+                  <div className="flex items-center gap-3">
+                
+                    <div
+                      className="
+                      w-11 h-11 rounded-full
+                      bg-primary/10
+                      flex items-center justify-center
+                      font-bold text-primary
+                      "
+                    >
+                      {user.name?.charAt(0).toUpperCase()}
+                    </div>
+                
+                    <div>
+                      <p className="font-semibold">
+                        {user.name}
+                      </p>
+                
+                      <p className="text-xs text-muted-foreground">
+                        Customer
+                      </p>
+                    </div>
+                
+                  </div>
+                </td>
+                
+                <td className="p-4">
+                  <span className="text-sm">
+                    {user.email}
+                  </span>
+                </td>
 
                 <td className="p-4">{user.phone}</td>
 
-                <td className="p-4">{user.address}</td>
+                <td className="p-4 max-w-[300px]">
+                  <p className="line-clamp-2 text-sm text-muted-foreground">
+                    {user.fullAddress}
+                  </p>
+                </td>
+
+                <td className="p-4">
+                  <span
+                    className="
+                    px-3 py-1 rounded-full text-xs
+                    bg-primary text-primary-foreground
+                    "
+                  >
+                    {user.addressType}
+                  </span>
+                </td>
 
                 <td className="p-4 capitalize">
                   <div className="flex items-center justify-between">
-                    <span>{user.role}</span>
+                    <span
+                      className={`
+                      px-3 py-1 rounded-full text-xs font-medium
+                      ${
+                        user.role === "admin"
+                          ? "bg-red-500 text-white"
+                          : "bg-green-500 text-white"
+                      }
+                      `}
+                    >
+                      {user.role}
+                    </span>
 
                     <button
                       onClick={(e) => {
