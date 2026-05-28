@@ -551,7 +551,7 @@ hover:-translate-y-1
                                   />
                                 ))}
                               </div>
-                              {user?._id === review.user && (
+                              {user?._id === review.user?.toString() && (
                                 <button
                                   onClick={() => setEditingReview(review)}
                                   className="text-blue-500"
@@ -559,7 +559,7 @@ hover:-translate-y-1
                                   <Pencil className="w-5 h-5" />
                                 </button>
                               )}
-                              {(user?._id === review.user ||
+                              {(user?._id === review.user?.toString() ||
                                 user?.role === "admin") && (
                                 <button
                                   onClick={() => deleteReview(review._id)}
