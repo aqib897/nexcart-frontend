@@ -64,6 +64,8 @@ const ProductPage = () => {
   const [reviewRating, setReviewRating] = useState(5);
   const [wishlist, setWishlist] = useState(false);
   const [editingReview, setEditingReview] = useState(null);
+  const [reviewImages, setReviewImages] = useState([]);
+  const [reviewVideos, setReviewVideos] = useState([]);
 
   const reviews = product?.reviews || [];
 
@@ -152,16 +154,26 @@ const ProductPage = () => {
     }
 
     try {
+      const formData = new FormData();
+
+      formData.append("name", reviewName);
+      formData.append("rating", reviewRating);
+      formData.append("comment", reviewComment);
+
+      reviewImages.forEach((img) => {
+        formData.append("images", img);
+      });
+
+      reviewVideos.forEach((video) => {
+        formData.append("videos", video);
+      });
       const { data } = await axios.post(
         `${server}/api/product/${id}/review`,
-        {
-          name: reviewName,
-          rating: reviewRating,
-          comment: reviewComment,
-        },
+        formData,
         {
           headers: {
             Authorization: `Bearer ${Cookies.get("token")}`,
+            "Content-Type": "multipart/form-data",
           },
         },
       );
@@ -499,6 +511,28 @@ cursor-zoom-in
                       className="w-full border rounded-xl p-4 min-h-[120px] bg-background"
                     />
 
+                    <div className="space-y-2">
+                      <Label>Upload Images (Optional)</Label>
+
+                      <Input
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        onChange={(e) => setReviewImages([...e.target.files])}
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Upload Videos (Optional)</Label>
+
+                      <Input
+                        type="file"
+                        multiple
+                        accept="video/*"
+                        onChange={(e) => setReviewVideos([...e.target.files])}
+                      />
+                    </div>
+
                     <select
                       value={reviewRating}
                       onChange={(e) => setReviewRating(Number(e.target.value))}
@@ -557,7 +591,7 @@ hover:-translate-y-1
                                   className="text-blue-500"
                                 >
                                   <Pencil className="w-5 h-5" />
-                                </button>     
+                                </button>
                               )}
                               {(user?._id === review.user?.toString() ||
                                 user?.role === "admin") && (
@@ -574,6 +608,32 @@ hover:-translate-y-1
                           <p className="mt-4 text-muted-foreground leading-7">
                             {review.comment}
                           </p>
+                          {review.images?.length > 0 && (
+                            <div className="flex gap-3 mt-4 overflow-x-auto">
+                              {review.images.map((img, index) => (
+                                <img
+                                  key={index}
+                                  src={img.url}
+                                  alt=""
+                                  className="
+        w-24 h-24 rounded-xl object-cover border
+        "
+                                />
+                              ))}
+                            </div>
+                          )}
+                          {review.videos?.length > 0 && (
+                            <div className="flex gap-3 mt-4 overflow-x-auto">
+                              {review.videos.map((video, index) => (
+                                <video
+                                  key={index}
+                                  src={video.url}
+                                  controls
+                                  className="w-48 rounded-xl border"
+                                />
+                              ))}
+                            </div>
+                          )}
                         </div>
                       ))
                     ) : (
