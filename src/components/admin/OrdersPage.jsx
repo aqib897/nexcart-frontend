@@ -134,14 +134,14 @@ const OrdersPage = () => {
                       className="flex items-center gap-3"
                     >
                       <img
-                        src={order.items[0]?.product?.images[0]?.url}
+                        src={order.items?.[0]?.product?.images?.[0]?.url}
                         alt={order.items[0]?.product?.title}
                         className="w-12 h-12 object-cover rounded-md border"
                       />
 
                       <div className="flex flex-col">
                         <span className="font-medium line-clamp-1">
-                          {order.items[0]?.product?.title}
+                          {order.items?.[0]?.product?.title || "Product Removed"}
                         </span>
 
                         <span className="text-xs text-muted-foreground">
@@ -150,7 +150,9 @@ const OrdersPage = () => {
                       </div>
                     </Link>
                   </TableCell>
-                  <TableCell>{order.user.email}</TableCell>
+                  <TableCell>
+                    {order.user?.email || "User Deleted"}
+                  </TableCell>
                   <TableCell>₹ {order.subTotal}</TableCell>
                   <TableCell>
                     <span
