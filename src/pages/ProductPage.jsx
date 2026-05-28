@@ -275,7 +275,7 @@ const ProductPage = () => {
                               src={image.url}
                               alt={`Product ${index + 1}`}
                               className="
-w-full rounded-2xl object-cover
+w-full rounded-2xl overflow-hidden object-cover
 transition duration-500 hover:scale-105
 "
                             />
