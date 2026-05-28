@@ -55,39 +55,32 @@ const fetchPincodeDetails = async (
   try {
 
     const res = await axios.get(
-      `https://api.postalpincode.in/pincode/${pin.trim()}`
+      `https://api.zippopotam.us/in/${pin.trim()}`
     );
 
-    const data = res.data[0];
+    const place = res.data.places?.[0];
 
-    if (
-      data.Status === "Success" &&
-      data.PostOffice?.length > 0
-    ) {
+    if (!place) return;
 
-      const city =
-        data.PostOffice[0].District;
+    const city = place["place name"];
 
-      const state =
-        data.PostOffice[0].State;
+    const state = place["state"];
 
-      if (isEdit) {
+    if (isEdit) {
 
-        setEditAddress((prev) => ({
-          ...prev,
-          city,
-          state,
-        }));
+      setEditAddress((prev) => ({
+        ...prev,
+        city,
+        state,
+      }));
 
-      } else {
+    } else {
 
-        setNewAddress((prev) => ({
-          ...prev,
-          city,
-          state,
-        }));
-      }
-
+      setNewAddress((prev) => ({
+        ...prev,
+        city,
+        state,
+      }));
     }
 
   } catch (error) {
