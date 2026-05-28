@@ -55,43 +55,47 @@ const fetchPincodeDetails = async (
   try {
 
     const res = await axios.get(
-      `https://api.zippopotam.us/in/${pin.trim()}`
+      `https://api.postalpincode.in/pincode/${pin.trim()}`
     );
 
-    const place = res.data.places?.[0];
+    const data = res.data[0];
 
-    if (!place) return;
+    if (
+      data.Status === "Success" &&
+      data.PostOffice?.length > 0
+    ) {
 
-    const city = place["place name"];
+      const city =
+        data.PostOffice[0].District;
 
-    const state = place["state"];
+      const state =
+        data.PostOffice[0].State;
 
-    if (isEdit) {
+      if (isEdit) {
 
-      setEditAddress((prev) => ({
-        ...prev,
-        city,
-        state,
-      }));
+        setEditAddress((prev) => ({
+          ...prev,
+          city,
+          state,
+        }));
 
-    } else {
+      } else {
 
-      setNewAddress((prev) => ({
-        ...prev,
-        city,
-        state,
-      }));
+        setNewAddress((prev) => ({
+          ...prev,
+          city,
+          state,
+        }));
+      }
+
     }
 
   } catch (error) {
 
-    console.log(
-      "Pincode fetch failed:",
-      error.message
-    );
+    console.log("Pincode API failed");
+
   }
 };
-
   const [editAddress, setEditAddress] = useState({
   firstName: "",
   lastName: "",
@@ -466,16 +470,26 @@ const fetchPincodeDetails = async (
             />
           
             <Input
-              placeholder="City"
-              value={newAddress.city}
-              readOnly
-            />
+  placeholder="City"
+  value={newAddress.city}
+  onChange={(e) =>
+    setNewAddress({
+      ...newAddress,
+      city: e.target.value,
+    })
+  }
+/>
           
             <Input
-              placeholder="State"
-              value={newAddress.state}
-              readOnly
-            />
+  placeholder="State"
+  value={newAddress.state}
+  onChange={(e) =>
+    setNewAddress({
+      ...newAddress,
+      state: e.target.value,
+    })
+  }
+/>
           
           </div>
           </DialogHeader>
@@ -604,17 +618,27 @@ const fetchPincodeDetails = async (
               }}
             />
           
-            <Input
-              placeholder="City"
-              value={editAddress.city}
-              readOnly
-            />
+           <Input
+  placeholder="City"
+  value={newAddress.city}
+  onChange={(e) =>
+    setNewAddress({
+      ...newAddress,
+      city: e.target.value,
+    })
+  }
+/>
           
             <Input
-              placeholder="State"
-              value={editAddress.state}
-              readOnly
-            />
+  placeholder="State"
+  value={newAddress.state}
+  onChange={(e) =>
+    setNewAddress({
+      ...newAddress,
+      state: e.target.value,
+    })
+  }
+/>
           
           </div>
           </DialogHeader>
