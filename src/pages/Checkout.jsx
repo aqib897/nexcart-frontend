@@ -45,7 +45,7 @@ const Checkout = () => {
 
   const [editingAddressId, setEditingAddressId] = useState(null);
 
-  const fetchPincodeDetails = async (
+const fetchPincodeDetails = async (
   pin,
   isEdit = false
 ) => {
@@ -55,12 +55,15 @@ const Checkout = () => {
   try {
 
     const res = await axios.get(
-      `https://api.postalpincode.in/pincode/${pin}`
+      `https://api.postalpincode.in/pincode/${pin.trim()}`
     );
 
     const data = res.data[0];
 
-    if (data.Status === "Success") {
+    if (
+      data.Status === "Success" &&
+      data.PostOffice?.length > 0
+    ) {
 
       const city =
         data.PostOffice[0].District;
@@ -84,10 +87,15 @@ const Checkout = () => {
           state,
         }));
       }
+
     }
 
   } catch (error) {
-    console.log(error);
+
+    console.log(
+      "Pincode fetch failed:",
+      error.message
+    );
   }
 };
 
@@ -218,59 +226,7 @@ const Checkout = () => {
       }
     }
   };
-  const fetchPincodeDetails = async (
-  pin,
-  isEdit = false
-) => {
 
-  if (pin.length !== 6) return;
-
-  try {
-
-    const res = await axios.get(
-      `https://api.postalpincode.in/pincode/${pin.trim()}`
-    );
-
-    const data = res.data[0];
-
-    if (
-      data.Status === "Success" &&
-      data.PostOffice?.length > 0
-    ) {
-
-      const city =
-        data.PostOffice[0].District;
-
-      const state =
-        data.PostOffice[0].State;
-
-      if (isEdit) {
-
-        setEditAddress((prev) => ({
-          ...prev,
-          city,
-          state,
-        }));
-
-      } else {
-
-        setNewAddress((prev) => ({
-          ...prev,
-          city,
-          state,
-        }));
-      }
-
-    }
-
-  } catch (error) {
-
-    console.log(
-      "Pincode fetch failed:",
-      error.message
-    );
-  }
-};
   return (
     <div className="container mx-auto px-4 py-8 min-h-[60vh]">
       <h1 className="text-3xl font-bold mb-6 text-center">Checkout</h1>
