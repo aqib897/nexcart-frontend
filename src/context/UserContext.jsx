@@ -12,14 +12,20 @@ export const UserProvider = ({ children }) => {
   const [btnLoading, setBtnLoading] = useState(false);
   const [isAuth, setIsAuth] = useState(false);
 
-  async function loginUser(email, navigate) {
+ async function loginUser(name, email, navigate) {
     setBtnLoading(true);
     try {
-      const { data } = await axios.post(`${server}/api/user/login`, { email });
+      const { data } = await axios.post(`${server}/api/user/login`,
+        {
+          name,
+          email,
+        }
+      );
 
       toast.success(data.message);
 
       localStorage.setItem("email", email);
+      localStorage.setItem("name", name);
       navigate("/verify");
       setBtnLoading(false);
     } catch (error) {
@@ -30,8 +36,10 @@ export const UserProvider = ({ children }) => {
   async function verifyUser(otp, navigate, fetchCart) {
     setBtnLoading(true);
     const email = localStorage.getItem("email");
+    const name = localStorage.getItem("name");
     try {
       const { data } = await axios.post(`${server}/api/user/verify`, {
+        name,
         email,
         otp,
       });
