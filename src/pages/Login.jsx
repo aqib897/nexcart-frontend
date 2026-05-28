@@ -16,11 +16,12 @@ import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
 
   const navigate = useNavigate();
 
   const { loginUser, btnLoading } = UserData();
-  const [name, setName] = useState("");
+  
 
   const submitHandler = () => {
     loginUser(name, email, navigate);
