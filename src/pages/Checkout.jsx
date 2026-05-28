@@ -44,20 +44,93 @@ const Checkout = () => {
 
   const [editingAddressId, setEditingAddressId] = useState(null);
 
+  const fetchPincodeDetails = async (
+  pin,
+  isEdit = false
+) => {
+
+  if (pin.length !== 6) return;
+
+  try {
+
+    const res = await axios.get(
+      `https://api.postalpincode.in/pincode/${pin}`
+    );
+
+    const data = res.data[0];
+
+    if (data.Status === "Success") {
+
+      const city =
+        data.PostOffice[0].District;
+
+      const state =
+        data.PostOffice[0].State;
+
+      if (isEdit) {
+
+        setEditAddress((prev) => ({
+          ...prev,
+          city,
+          state,
+        }));
+
+      } else {
+
+        setNewAddress((prev) => ({
+          ...prev,
+          city,
+          state,
+        }));
+      }
+    }
+
+  } catch (error) {
+    console.log(error);
+  }
+};
+
   const [editAddress, setEditAddress] = useState({
-    address: "",
-    phone: "",
-  });
+  firstName: "",
+  lastName: "",
+
+  phone: "",
+
+  address1: "",
+  address2: "",
+
+  landmark: "",
+
+  city: "",
+  state: "",
+
+  pincode: "",
+
+  type: "Home",
+});
   const [newAddress, setNewAddress] = useState({
-    address: "",
-    phone: "",
-  });
+  firstName: "",
+  lastName: "",
+
+  phone: "",
+
+  address1: "",
+  address2: "",
+
+  landmark: "",
+
+  city: "",
+  state: "",
+
+  pincode: "",
+
+  type: "Home",
+});
 
   const handleAddAddress = async () => {
     try {
-      const { data } = await axios.post(
-        `${server}/api/address/new`,
-        { address: newAddress.address, phone: newAddress.phone },
+      const { data } = await axios.post(`${server}/api/address/new`,
+      newAddress,
         {
           headers: {
             Authorization: `Bearer ${Cookies.get("token")}`,
@@ -66,14 +139,32 @@ const Checkout = () => {
       );
 
       if (data.message) {
-        toast.success(data.message);
-        await fetchAddress();
-        (setNewAddress({
-          address: "",
-          phone: "",
-        }),
-          setModalOpen(false));
-      }
+
+      toast.success(data.message);
+    
+      await fetchAddress();
+    
+      setNewAddress({
+        firstName: "",
+        lastName: "",
+    
+        phone: "",
+    
+        address1: "",
+        address2: "",
+    
+        landmark: "",
+    
+        city: "",
+        state: "",
+    
+        pincode: "",
+    
+        type: "Home",
+      });
+    
+      setModalOpen(false);
+    }
     } catch (error) {
       toast.error(error.response.data.message);
     }
@@ -83,12 +174,8 @@ const Checkout = () => {
     setUpdating(true);
 
     try {
-      const { data } = await axios.put(
-        `${server}/api/address/${editingAddressId}`,
-        {
-          address: editAddress.address,
-          phone: editAddress.phone,
-        },
+      const { data } = await axios.put(`${server}/api/address/${editingAddressId}`,
+      editAddress,
         {
           headers: {
             Authorization: `Bearer ${Cookies.get("token")}`,
@@ -139,44 +226,117 @@ const Checkout = () => {
         <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           {address && address.length > 0 ? (
             address.map((e) => (
-              <div className="p-4 border rounded-lg shadow-sm" key={e._id}>
-                <div className="flex items-start justify-between gap-3">
-                  <h3 className="text-lg font-semibold flex-1 min-w-0 break-words">
-                    Address - {e.address}
+              <div
+            key={e._id}
+            className="
+            border rounded-2xl p-5
+            bg-background
+            hover:shadow-xl
+            hover:border-primary
+            transition-all duration-300
+            space-y-4
+            "
+          >
+          
+            <div className="flex items-start justify-between gap-4">
+          
+              <div className="space-y-1">
+          
+                <div className="flex items-center gap-2">
+          
+                  <h3 className="font-bold text-lg">
+                    {e.firstName} {e.lastName}
                   </h3>
-
-                  <div className="flex gap-2 flex-shrink-0">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => {
-                        setEditingAddressId(e._id);
-
-                        setEditAddress({
-                          address: e.address,
-                          phone: e.phone,
-                        });
-
-                        setEditModalOpen(true);
-                      }}
-                    >
-                      Edit
-                    </Button>
-
-                    <Button
-                      size="sm"
-                      variant="destructive"
-                      onClick={() => deleteHandler(e._id)}
-                    >
-                      <Trash className="w-4 h-4" />
-                    </Button>
-                  </div>
+          
+                  <span
+                    className="
+                    text-xs px-3 py-1 rounded-full
+                    bg-primary text-primary-foreground
+                    "
+                  >
+                    {e.type}
+                  </span>
+          
                 </div>
-                <p className="text-sm mb-4">Phone- {e.phone}</p>
-                <Link to={`/payment/${e._id}`}>
-                  <Button variant="outline">Use Address</Button>
-                </Link>
+          
+                <p className="text-sm text-muted-foreground">
+                  +91 {e.phone}
+                </p>
+          
               </div>
+          
+              <div className="flex gap-2">
+          
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+          
+                    setEditingAddressId(e._id);
+          
+                    setEditAddress({
+                      firstName: e.firstName || "",
+                      lastName: e.lastName || "",
+          
+                      phone: e.phone || "",
+          
+                      address1: e.address1 || "",
+                      address2: e.address2 || "",
+          
+                      landmark: e.landmark || "",
+          
+                      city: e.city || "",
+                      state: e.state || "",
+          
+                      pincode: e.pincode || "",
+          
+                      type: e.type || "Home",
+                    });
+          
+                    setEditModalOpen(true);
+                  }}
+                >
+                  Edit
+                </Button>
+          
+                <Button
+                  size="sm"
+                  variant="destructive"
+                  onClick={() => deleteHandler(e._id)}
+                >
+                  <Trash className="w-4 h-4" />
+                </Button>
+          
+              </div>
+            </div>
+          
+            <div className="text-sm leading-6 text-muted-foreground">
+          
+              <p>{e.address1}</p>
+          
+              {e.address2 && (
+                <p>{e.address2}</p>
+              )}
+          
+              {e.landmark && (
+                <p>Landmark: {e.landmark}</p>
+              )}
+          
+              <p>
+                {e.city}, {e.state} - {e.pincode}
+              </p>
+          
+              <p>{e.country}</p>
+          
+            </div>
+          
+            <Link to={`/payment/${e._id}`}>
+              <Button className="w-full rounded-xl">
+                Deliver Here
+              </Button>
+            </Link>
+
+          </div>
             ))
           ) : (
             <p>No Address Found</p>
@@ -196,23 +356,124 @@ const Checkout = () => {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Add New Address</DialogTitle>
-            <div className="space-y-4">
-              <Input
-                placeholder="Address"
-                value={newAddress.address}
-                onChange={(e) =>
-                  setNewAddress({ ...newAddress, address: e.target.value })
-                }
-              />
-              <Input
-                type="number"
-                placeholder="Phone"
-                value={newAddress.phone}
-                onChange={(e) =>
-                  setNewAddress({ ...newAddress, phone: e.target.value })
-                }
-              />
-            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <Input
+              placeholder="First Name"
+              value={newAddress.firstName}
+              onChange={(e) =>
+                setNewAddress({
+                  ...newAddress,
+                  firstName: e.target.value,
+                })
+              }
+            />
+          
+            <Input
+              placeholder="Last Name"
+              value={newAddress.lastName}
+              onChange={(e) =>
+                setNewAddress({
+                  ...newAddress,
+                  lastName: e.target.value,
+                })
+              }
+            />
+          
+            <Input
+              type="number"
+              placeholder="Phone Number"
+              value={newAddress.phone}
+              onChange={(e) =>
+                setNewAddress({
+                  ...newAddress,
+                  phone: e.target.value,
+                })
+              }
+            />
+          
+            <select
+              value={newAddress.type}
+              onChange={(e) =>
+                setNewAddress({
+                  ...newAddress,
+                  type: e.target.value,
+                })
+              }
+              className="
+              border rounded-md px-3 py-2
+              bg-background
+              "
+            >
+              <option value="Home">Home</option>
+              <option value="Office">Office</option>
+              <option value="Other">Other</option>
+            </select>
+          
+            <Input
+              placeholder="Address Line 1"
+              className="md:col-span-2"
+              value={newAddress.address1}
+              onChange={(e) =>
+                setNewAddress({
+                  ...newAddress,
+                  address1: e.target.value,
+                })
+              }
+            />
+          
+            <Input
+              placeholder="Address Line 2"
+              className="md:col-span-2"
+              value={newAddress.address2}
+              onChange={(e) =>
+                setNewAddress({
+                  ...newAddress,
+                  address2: e.target.value,
+                })
+              }
+            />
+          
+            <Input
+              placeholder="Landmark"
+              className="md:col-span-2"
+              value={newAddress.landmark}
+              onChange={(e) =>
+                setNewAddress({
+                  ...newAddress,
+                  landmark: e.target.value,
+                })
+              }
+            />
+          
+            <Input
+              type="number"
+              placeholder="Pincode"
+              value={newAddress.pincode}
+              onChange={(e) => {
+          
+                setNewAddress({
+                  ...newAddress,
+                  pincode: e.target.value,
+                });
+          
+                fetchPincodeDetails(e.target.value);
+              }}
+            />
+          
+            <Input
+              placeholder="City"
+              value={newAddress.city}
+              readOnly
+            />
+          
+            <Input
+              placeholder="State"
+              value={newAddress.state}
+              readOnly
+            />
+          
+          </div>
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" onClick={() => setModalOpen(false)}>
@@ -230,30 +491,127 @@ const Checkout = () => {
           <DialogHeader>
             <DialogTitle>Edit Address</DialogTitle>
 
-            <div className="space-y-4">
-              <Input
-                placeholder="Address"
-                value={editAddress.address}
-                onChange={(e) =>
-                  setEditAddress({
-                    ...editAddress,
-                    address: e.target.value,
-                  })
-                }
-              />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-              <Input
-                type="number"
-                placeholder="Phone"
-                value={editAddress.phone}
-                onChange={(e) =>
-                  setEditAddress({
-                    ...editAddress,
-                    phone: e.target.value,
-                  })
-                }
-              />
-            </div>
+            <Input
+              placeholder="First Name"
+              value={editAddress.firstName}
+              onChange={(e) =>
+                setEditAddress({
+                  ...editAddress,
+                  firstName: e.target.value,
+                })
+              }
+            />
+          
+            <Input
+              placeholder="Last Name"
+              value={editAddress.lastName}
+              onChange={(e) =>
+                setEditAddress({
+                  ...editAddress,
+                  lastName: e.target.value,
+                })
+              }
+            />
+          
+            <Input
+              type="number"
+              placeholder="Phone Number"
+              value={editAddress.phone}
+              onChange={(e) =>
+                setEditAddress({
+                  ...editAddress,
+                  phone: e.target.value,
+                })
+              }
+            />
+          
+            <select
+              value={editAddress.type}
+              onChange={(e) =>
+                setEditAddress({
+                  ...editAddress,
+                  type: e.target.value,
+                })
+              }
+              className="
+              border rounded-md px-3 py-2
+              bg-background
+              "
+            >
+              <option value="Home">Home</option>
+              <option value="Office">Office</option>
+              <option value="Other">Other</option>
+            </select>
+          
+            <Input
+              placeholder="Address Line 1"
+              className="md:col-span-2"
+              value={editAddress.address1}
+              onChange={(e) =>
+                setEditAddress({
+                  ...editAddress,
+                  address1: e.target.value,
+                })
+              }
+            />
+          
+            <Input
+              placeholder="Address Line 2"
+              className="md:col-span-2"
+              value={editAddress.address2}
+              onChange={(e) =>
+                setEditAddress({
+                  ...editAddress,
+                  address2: e.target.value,
+                })
+              }
+            />
+          
+            <Input
+              placeholder="Landmark"
+              className="md:col-span-2"
+              value={editAddress.landmark}
+              onChange={(e) =>
+                setEditAddress({
+                  ...editAddress,
+                  landmark: e.target.value,
+                })
+              }
+            />
+          
+            <Input
+              type="number"
+              placeholder="Pincode"
+              value={editAddress.pincode}
+              onChange={(e) => {
+          
+                setEditAddress({
+                  ...editAddress,
+                  pincode: e.target.value,
+                });
+          
+                fetchPincodeDetails(
+                  e.target.value,
+                  true
+                );
+              }}
+            />
+          
+            <Input
+              placeholder="City"
+              value={editAddress.city}
+              readOnly
+            />
+          
+            <Input
+              placeholder="State"
+              value={editAddress.state}
+              readOnly
+            />
+          
+          </div>
           </DialogHeader>
 
           <DialogFooter>
