@@ -27,6 +27,8 @@ import {
   ShieldCheck,
   RotateCcw,
   BadgeCheck,
+  Trash2,
+  Pencil,
 } from "lucide-react";
 import { Label } from "@/components/ui/label.jsx";
 import { Input } from "@/components/ui/input.jsx";
@@ -61,6 +63,7 @@ const ProductPage = () => {
   const [reviewComment, setReviewComment] = useState("");
   const [reviewRating, setReviewRating] = useState(5);
   const [wishlist, setWishlist] = useState(false);
+  const [editingReview, setEditingReview] = useState(null);
 
   const reviews = product?.reviews || [];
 
@@ -172,6 +175,24 @@ const ProductPage = () => {
       setReviewRating(5);
     } catch (error) {
       toast.error(error?.response?.data?.message || "Something went wrong");
+    }
+  };
+  const deleteReview = async (reviewId) => {
+    try {
+      const { data } = await axios.delete(
+        `${server}/api/product/${id}/review/${reviewId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
+        },
+      );
+
+      toast.success(data.message);
+
+      fetchProduct(id);
+    } catch (error) {
+      toast.error(error.response?.data?.message);
     }
   };
 
@@ -495,7 +516,7 @@ cursor-zoom-in
                     </Button>
                   </form>
 
-                  <div className="space-y-5">
+                  <div className="space-y-5 max-h-[600px] overflow-y-auto pr-2">
                     {reviews.length > 0 ? (
                       reviews.map((review, index) => (
                         <div
@@ -506,7 +527,7 @@ hover:shadow-xl transition-all duration-300
 hover:-translate-y-1
 "
                         >
-                          <div className="flex items-center justify-between">
+                          <div className="flex items-start justify-between gap-4">
                             <div>
                               <h3 className="font-semibold text-lg">
                                 {review.name}
@@ -517,17 +538,36 @@ hover:-translate-y-1
                               </span>
                             </div>
 
-                            <div className="flex">
-                              {[1, 2, 3, 4, 5].map((i) => (
-                                <Star
-                                  key={i}
-                                  className={`w-4 h-4 ${
-                                    i <= review.rating
-                                      ? "fill-yellow-400 text-yellow-400"
-                                      : "text-gray-300"
-                                  }`}
-                                />
-                              ))}
+                            <div className="flex items-center gap-3">
+                              <div className="flex">
+                                {[1, 2, 3, 4, 5].map((i) => (
+                                  <Star
+                                    key={i}
+                                    className={`w-4 h-4 ${
+                                      i <= review.rating
+                                        ? "fill-yellow-400 text-yellow-400"
+                                        : "text-gray-300"
+                                    }`}
+                                  />
+                                ))}
+                              </div>
+                              {user?._id === review.user && (
+                                <button
+                                  onClick={() => setEditingReview(review)}
+                                  className="text-blue-500"
+                                >
+                                  <Pencil className="w-5 h-5" />
+                                </button>
+                              )}
+                              {(user?._id === review.user ||
+                                user?.role === "admin") && (
+                                <button
+                                  onClick={() => deleteReview(review._id)}
+                                  className="text-red-500 hover:text-red-700"
+                                >
+                                  <Trash2 className="w-5 h-5" />
+                                </button>
+                              )}
                             </div>
                           </div>
 
