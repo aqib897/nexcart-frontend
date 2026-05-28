@@ -605,9 +605,9 @@ const fetchPincodeDetails = async (
           
            <Input
   placeholder="City"
-  value={newAddress.city}
+  value={editAddress.city}
   onChange={(e) =>
-    setNewAddress({
+    setEditAddress({
       ...newAddress,
       city: e.target.value,
     })
@@ -616,9 +616,9 @@ const fetchPincodeDetails = async (
           
             <Input
   placeholder="State"
-  value={newAddress.state}
+  value={editAddress.state}
   onChange={(e) =>
-    setNewAddress({
+    setEditAddress({
       ...newAddress,
       state: e.target.value,
     })
